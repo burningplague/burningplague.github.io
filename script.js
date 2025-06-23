@@ -1,5 +1,5 @@
 // ===========================================================
-// 1️⃣ Audio Init (one-time)
+// !-- Audio Init --
 // ===========================================================
 const audio = document.getElementById("bg-audio");
 if (audio) {
@@ -9,7 +9,7 @@ if (audio) {
 }
 
 // ===========================================================
-// 2️⃣ Random Image
+// !-- Random Image --
 // ===========================================================
 function setRandomImage() {
   const images = [
@@ -28,45 +28,25 @@ function setRandomImage() {
 }
 
 // ===========================================================
-// 3️⃣ Routes
+// !-- Routes --
 // ===========================================================
 const routes = {
-  '/': 'pages/home.html',
-  '/about': 'pages/about.html'
+  '': 'pages/home.html',
+  'about': 'pages/about.html'
 };
 
 async function loadPage() {
-  const path = window.location.pathname;
-  const pageUrl = routes[path] || routes['/'];
+  const hash = window.location.hash.replace('#', '');
+  const pageUrl = routes[hash] || routes[''];
   const app = document.getElementById('app');
   const response = await fetch(pageUrl);
   app.innerHTML = await response.text();
-
-  // After page load
   setRandomImage();
 }
 
 // ===========================================================
-// 4️⃣ Navigation
+// !-- Event Listeners --
 // ===========================================================
-function navigateTo(url) {
-  history.pushState(null, null, url);
-  loadPage();
-}
+window.addEventListener('hashchange', loadPage);
+window.addEventListener('DOMContentLoaded', loadPage);
 
-// ===========================================================
-// 5️⃣ Event Listeners
-// ===========================================================
-window.addEventListener('popstate', loadPage);
-
-window.addEventListener('DOMContentLoaded', () => {
-  loadPage();
-
-  // Route links
-  document.querySelectorAll('[data-link]').forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      navigateTo(link.getAttribute('href'));
-    });
-  });
-});
