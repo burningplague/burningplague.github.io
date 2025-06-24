@@ -2,18 +2,30 @@
 <html>
 <head>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="/src/len.png" type="image/png">
+  <title>missa</title>
+  <meta name="description" content="missa's site">
 </head>
 <body>
 
-<!-- Navigation -->
-<div class="topnav">
-  <a href="#" data-link>home</a>
-  <a href="#about" data-link>about</a>
+<!-- Landing Page -->
+<div id="landing" class="landing">
+  <button id="enter-button">click to enter</button>
 </div>
 
-<!-- Main SPA container -->
-<div id="app"></div>
+<!-- Main Content (initially hidden) -->
+<div id="main-content">
+  <!-- Navigation -->
+  <div class="topnav">
+    <a href="#" data-link>home</a>
+    <a href="#about" data-link>about</a>
+  </div>
 
+  <!-- Main SPA container -->
+  <div id="app"></div>
+</div>
+
+<!-- Audio Element -->
 <audio id="bg-audio"></audio>
 
 <!-- Scripts -->

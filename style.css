@@ -12,7 +12,7 @@ html {
  /* The navbar container */
 .topnav {
   overflow: visible;
-  background-color: #1e1e1f;
+  background-color: #1e1e1f00;
 }
 
 /* Navbar links */
@@ -32,7 +32,8 @@ html {
 } 
 
 body {
-    --background-color: #202021;
+    background-image: url(/src/prettifun.gif);
+    background-size: cover;
     --surface: #1e1e1f;
     --surface2: #29292b;
     --color: #e5e5e5;
@@ -151,18 +152,53 @@ img::selection {
     background-color: var(--accent-semi-trans);
 }
 
-/* ===================================================
- Landing Page Styles
- =================================================== */
-#landing {
+/* Landing page styles */
+.landing {
   position: fixed;
   inset: 0;
-  background-color: var(--background-color);
-  color: var(--color);
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  transition: opacity 1s ease;
-  z-index: 1000;
+
 }
+
+#enter-button {
+  font-size: 100%;
+  font-family: "ＭＳ Ｐゴシック";
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0);
+  color: #fff;
+  border: 1px solid #ffffff00;
+  cursor: pointer;
+}
+
+#main-content {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fade-duration, 4500ms) ease-in;
+
+
+/* Center contents */
+  display: flex;
+  flex-direction: column;      
+  justify-content: flex-start;  
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+#main-content.fade-in {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#enter-button {
+  transition: opacity 4500ms ease;
+}
+
+#enter-button.fade-out {
+  opacity: 0;
+  pointer-events: none; /* Prevent clicking during fade */
+}
+

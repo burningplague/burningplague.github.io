@@ -1,40 +1,58 @@
 // ===========================================================
-// 🎵 Random Audio Init
+// Landing + Main Audio Logic
 // ===========================================================
 const audio = document.getElementById("bg-audio");
-const audioFiles = [
-  "/src/monster.mp3",
-  "/src/witchbox.mp3"
-];
+const enterButton = document.getElementById("enter-button");
+const landingContainer = document.getElementById("landing");
+const mainContainer = document.getElementById("main-content");
+const appContainer = document.getElementById("app");
 
-if (audio) {
-  // Pick a random track
-  const randomTrack = audioFiles[Math.floor(Math.random() * audioFiles.length)];
-  audio.src = randomTrack;
+enterButton?.addEventListener("click", async (event) => {
+  event.preventDefault();
 
-  // Set properties
-  audio.volume = 0.2;
-  audio.loop = true;
+  // Set fade duration (milliseconds)
+  const fadeDuration = 2000;
 
-  // Try to play when user clicks
-  const playAudio = () => {
-    audio.play().catch((e) => {
-      console.log("Autoplay prevented:", e);
-    });
-    window.removeEventListener("click", playAudio);
-  };
-  window.addEventListener("click", playAudio);
-}
+  // Start fading button out & main content in simultaneously
+  enterButton.classList.add("fade-out");
+  mainContainer.classList.add("fade-in");
+
+  // Play the intro audio immediately (no wait)
+  audio.src = "/src/intro.mp3";
+  audio.volume = 1.0;
+
+  try {
+    await audio.play();
+
+    // Use the audio duration or fallback to fadeDuration
+    const introDuration = isNaN(audio.duration) || !isFinite(audio.duration)
+      ? fadeDuration
+      : audio.duration * 1000;
+
+    // After both fade and intro duration, switch audio and hide landing
+    setTimeout(() => {
+      audio.src = "/src/main.mp3";
+      audio.loop = true;
+      audio.volume = 0.5;
+      audio.play();
+      landingContainer.style.display = "none";
+    }, Math.max(fadeDuration, introDuration));  // Wait for the longer of fade or audio
+
+  } catch (e) {
+    console.error("Audio failed:", e);
+    landingContainer.style.display = "none";
+  }
+});
+
+
 
 // ===========================================================
-// 🖼️ Random Image
+// Random Image
 // ===========================================================
 function setRandomImage() {
   const images = [
     "/src/shiggy.gif",
     "/src/mamiya.png",
-    "/src/dunce.png",
-    "/src/png.png",
     "/src/rika.png",
     "/src/erika.png",
     "/src/len.png",
@@ -48,24 +66,20 @@ function setRandomImage() {
 }
 
 // ===========================================================
-// 📄 Routes
+// Routes
 // ===========================================================
 const routes = {
-  "": "pages/home.html",
-  about: "pages/about.html"
+  "": "home.html",
+  "about": "about.html"
 };
 
 async function loadPage() {
   const hash = window.location.hash.replace('#', '');
   const pageUrl = routes[hash] || routes[""];
-  const app = document.getElementById("app");
   const response = await fetch(pageUrl);
-  app.innerHTML = await response.text();
+  appContainer.innerHTML = await response.text();
   setRandomImage();
 }
 
-// ===========================================================
-// 👇 Event Listeners
-// ===========================================================
 window.addEventListener("hashchange", loadPage);
 window.addEventListener("DOMContentLoaded", loadPage);
