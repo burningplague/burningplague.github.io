@@ -17,6 +17,7 @@ html {
 
 /* Navbar links */
 .topnav a {
+  font-family: "ＭＳ Ｐゴシック";
   float: left;
   display: block;
   color: #f2f2f2;
@@ -32,7 +33,6 @@ html {
 } 
 
 body {
-    background-image: url(/src/prettifun.gif);
     background-size: cover;
     --surface: #1e1e1f;
     --surface2: #29292b;
@@ -73,10 +73,11 @@ body {
 h1 {
     align-items: center;
     text-align: center;
+    font-weight: normal;
 }
 
 html {
-    font-family: Inter, system-ui, sans-serif;
+    font-family: "ＭＳ Ｐゴシック";
 }
 
 a {
@@ -202,3 +203,43 @@ img::selection {
   pointer-events: none; /* Prevent clicking during fade */
 }
 
+#waveform {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  width: 150px;
+  height: 50px;
+  pointer-events: none; /* So it doesn’t block clicks */
+  z-index: 100;
+}
+
+html, body {
+  overflow: hidden;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#waveform-container {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+#footer-note {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  user-select: none;
+}
+
+#footer-note a:hover {
+  color: #fff;
+}

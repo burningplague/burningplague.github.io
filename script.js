@@ -10,33 +10,38 @@ const appContainer = document.getElementById("app");
 enterButton?.addEventListener("click", async (event) => {
   event.preventDefault();
 
-  // Set fade duration (milliseconds)
   const fadeDuration = 2000;
 
-  // Start fading button out & main content in simultaneously
+  // ---- START FADING ----
   enterButton.classList.add("fade-out");
   mainContainer.classList.add("fade-in");
 
-  // Play the intro audio immediately (no wait)
+  // ---- START INTRO AUDIO ----
   audio.src = "/src/intro.mp3";
   audio.volume = 1.0;
 
   try {
     await audio.play();
 
-    // Use the audio duration or fallback to fadeDuration
     const introDuration = isNaN(audio.duration) || !isFinite(audio.duration)
       ? fadeDuration
       : audio.duration * 1000;
 
-    // After both fade and intro duration, switch audio and hide landing
+    // ---- INIT WAVEFORM ----
+    setupWaveform();
+    if (audioContext.state === "suspended") {
+      await audioContext.resume();
+    }
+    drawWaveform();
+
+    // ---- TRANSITION TO MAIN LOOP ----
     setTimeout(() => {
       audio.src = "/src/main.mp3";
       audio.loop = true;
       audio.volume = 0.5;
       audio.play();
       landingContainer.style.display = "none";
-    }, Math.max(fadeDuration, introDuration));  // Wait for the longer of fade or audio
+    }, Math.max(fadeDuration, introDuration));
 
   } catch (e) {
     console.error("Audio failed:", e);
@@ -46,9 +51,12 @@ enterButton?.addEventListener("click", async (event) => {
 
 
 
+
 // ===========================================================
 // Random Image
 // ===========================================================
+let lastImage = null;
+
 function setRandomImage() {
   const images = [
     "/src/shiggy.gif",
@@ -58,12 +66,41 @@ function setRandomImage() {
     "/src/len.png",
     "/src/arcuied.png"
   ];
-  const randomImage = images[Math.floor(Math.random() * images.length)];
+
+  let randomImage;
+  do {
+    randomImage = images[Math.floor(Math.random() * images.length)];
+  } while (randomImage === lastImage);
+
+  lastImage = randomImage;
+
   const imgElement = document.querySelector(".shiggy");
   if (imgElement) {
     imgElement.src = randomImage;
   }
 }
+
+
+// ===========================
+// Cycled Background Images
+// ===========================
+window.addEventListener("DOMContentLoaded", () => {
+  const images = [
+    "/src/prettifun.gif",
+    "/src/che.gif",
+    "/src/osama.gif"
+  ];
+
+  let index = parseInt(localStorage.getItem("bgIndex")) || 0;
+
+  document.body.style.backgroundImage = `url(${images[index]})`;
+
+  index = (index + 1) % images.length;
+
+  localStorage.setItem("bgIndex", index);
+});
+
+
 
 // ===========================================================
 // Routes
@@ -83,3 +120,49 @@ async function loadPage() {
 
 window.addEventListener("hashchange", loadPage);
 window.addEventListener("DOMContentLoaded", loadPage);
+
+// ================================
+// Waveform Visualizer
+// ================================
+
+let audioContext;
+let analyser;
+let dataArray;
+let bufferLength;
+
+const canvas = document.getElementById("waveform");
+const ctx = canvas.getContext("2d");
+
+function setupWaveform() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioContext.createMediaElementSource(audio);
+    analyser = audioContext.createAnalyser();
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+    analyser.fftSize = 256;
+    bufferLength = analyser.frequencyBinCount;
+    dataArray = new Uint8Array(bufferLength);
+  }
+}
+
+function drawWaveform() {
+  requestAnimationFrame(drawWaveform);
+  analyser.getByteFrequencyData(dataArray);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const barWidth = (canvas.width / bufferLength) * 2.5;
+
+  for (let i = 0; i < bufferLength; i++) {
+    const barHeight = dataArray[i] / 255.0 * canvas.height;
+
+    ctx.fillStyle = "#eebebe"; // Bar color
+    ctx.fillRect(
+      i * barWidth,             // x-position
+      canvas.height - barHeight, // y-position
+      barWidth - 1,               // bar spacing
+      barHeight                   // bar height
+    );
+  }
+}
+
