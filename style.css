@@ -30,7 +30,18 @@ html {
 .topnav a:hover {
   background-color: #ddd;
   color: black;
-} 
+}
+
+.topnav a {
+  transition: transform 0.2s ease;  /* smooth animation */
+}
+
+.topnav a:hover {
+  transform: scale(1.05);  /* slightly enlarge */
+  background-color: #ddd;
+  color: black;
+}
+
 
 body {
     background-size: cover;
@@ -69,6 +80,7 @@ body {
     flex-direction: column;
     justify-content: flex-start;
 }
+
 
 h1 {
     align-items: center;
@@ -242,4 +254,26 @@ html, body {
 
 #footer-note a:hover {
   color: #fff;
+}
+
+.petal {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(#ff9ebd4b, #ff6fa449);
+  border-radius: 50% 40% 50% 40%; /* Rough petal shape */
+  pointer-events: none;
+  opacity: 1;
+  animation: fall 1.5s ease-out;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(30px) scale(0.5) rotate(45deg);
+    opacity: 0;
+  }
 }

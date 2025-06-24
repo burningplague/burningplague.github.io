@@ -88,7 +88,8 @@ window.addEventListener("DOMContentLoaded", () => {
   const images = [
     "/src/prettifun.gif",
     "/src/che.gif",
-    "/src/osama.gif"
+    "/src/osama.gif",
+    "/src/hic.gif"
   ];
 
   let index = parseInt(localStorage.getItem("bgIndex")) || 0;
@@ -166,3 +167,26 @@ function drawWaveform() {
   }
 }
 
+// Preload hover and click sounds
+const beepSound = new Audio('/src/beep.mp3');
+beepSound.volume =0.2;
+
+const clickSound = new Audio('/src/click.mp3');
+clickSound.volume=0.2;
+
+// Select all nav bar links (adjust the selector to your nav links)
+const navLinks = document.querySelectorAll('nav a, .topnav a'); // example selectors
+
+navLinks.forEach(link => {
+  // Play beep sound on hover
+  link.addEventListener('mouseenter', () => {
+    beepSound.currentTime = 0;
+    beepSound.play().catch(() => {}); // catch to avoid uncaught promise error
+  });
+
+  // Play click sound on click
+  link.addEventListener('click', () => {
+    clickSound.currentTime = 0;
+    clickSound.play().catch(() => {});
+  });
+});
