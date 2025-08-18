@@ -267,6 +267,49 @@ html, body {
   animation: fall 1.5s ease-out;
 }
 
+.profile-card {
+  width: 355px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color:#1e1e1f;
+  color: white;
+  position: relative;
+  font-size: 16px;
+}
+
+.banner {
+  height: 80px;
+  background-image: url(https://i.pinimg.com/originals/c3/72/08/c372083bd8cdb9a31436b5947942f329.gif);
+  background-size: cover;
+  background-position: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid #1e1e1f;
+  margin-right: 10px;
+}
+
+.username {
+  font-weight: bold;
+}
+
+.discord-icon {
+  width: 18px;
+  height: 18px;
+  opacity: 0.6;
+  filter: invert();
+  margin-left: 155px;
+}
+
 @keyframes fall {
   0% {
     transform: translateY(0px) scale(1);
